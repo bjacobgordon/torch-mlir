@@ -2774,7 +2774,8 @@ void mlir::torch::onnx_c::populateDefaultDomainQtoZ(
               rewriter.create<Torch::ConstantStrOp>(opLocation, modeStr);
         }
 
-        unsigned rank = cast<Torch::ValueTensorType>(operands[0].getType())
+        Value inputTensor = operands[0];
+        unsigned rank = cast<Torch::ValueTensorType>(inputTensor.getType())
                             .getSizes()
                             .size();
 
@@ -2831,7 +2832,7 @@ void mlir::torch::onnx_c::populateDefaultDomainQtoZ(
         }
         rewriter
             .replaceOpWithNewOp<Torch::Aten__InterpolateSizeListScaleListOp>(
-                binder.op, resultType, operands[0], sizesValueList,
+                binder.op, resultType, inputTensor, sizesValueList,
                 scalesValueList, modeStrValue,
                 /* AnyTorchOptionalBoolType:$align_corners */ alignCorners,
                 /* AnyTorchOptionalBoolType:$recompute_scale_factor */ noneVal,
