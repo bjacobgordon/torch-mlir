@@ -2757,13 +2757,15 @@ void mlir::torch::onnx_c::populateDefaultDomainQtoZ(
                             .getSizes()
                             .size();
 
+        auto opLocation = binder.getLoc();
+
         Value cstFalse =
-            rewriter.create<Torch::ConstantBoolOp>(binder.getLoc(), false);
+            rewriter.create<Torch::ConstantBoolOp>(opLocation, false);
         Value cstTrue =
-            rewriter.create<Torch::ConstantBoolOp>(binder.getLoc(), true);
+            rewriter.create<Torch::ConstantBoolOp>(opLocation, true);
         Value modeStrValue;
 
-        Value noneVal = rewriter.create<Torch::ConstantNoneOp>(binder.getLoc());
+        Value noneVal = rewriter.create<Torch::ConstantNoneOp>(opLocation);
         Value scalesValueList = noneVal;
         Value sizesValueList = noneVal;
         Value alignCorners =
@@ -2773,7 +2775,7 @@ void mlir::torch::onnx_c::populateDefaultDomainQtoZ(
           if (coordTfMode != "half_pixel")
             modeStr = modeStr + "_" + coordTfMode;
           modeStrValue =
-              rewriter.create<Torch::ConstantStrOp>(binder.getLoc(), modeStr);
+              rewriter.create<Torch::ConstantStrOp>(opLocation, modeStr);
         }
         // supported modes:
         // bilinear (half_pixel), bilinear with align_corners,
@@ -2800,7 +2802,7 @@ void mlir::torch::onnx_c::populateDefaultDomainQtoZ(
           if (coordTfMode != "half_pixel" && coordTfMode != "align_corners")
             modeStr = (modeStr + "_") + coordTfMode;
           modeStrValue =
-              rewriter.create<Torch::ConstantStrOp>(binder.getLoc(), modeStr);
+              rewriter.create<Torch::ConstantStrOp>(opLocation, modeStr);
         }
         if (mode == "nearest") {
           std::string modeStr = "nearest";
@@ -2811,7 +2813,7 @@ void mlir::torch::onnx_c::populateDefaultDomainQtoZ(
           if (nearest_mode != "floor" && nearest_mode != "")
             modeStr = modeStr + "," + nearest_mode;
           modeStrValue =
-              rewriter.create<Torch::ConstantStrOp>(binder.getLoc(), modeStr);
+              rewriter.create<Torch::ConstantStrOp>(opLocation, modeStr);
         }
         if (operands.size() < 4) {
           Value scaleOperand = operands[2];
