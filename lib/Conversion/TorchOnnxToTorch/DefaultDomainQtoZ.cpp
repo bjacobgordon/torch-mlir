@@ -2778,7 +2778,7 @@ void mlir::torch::onnx_c::populateDefaultDomainQtoZ(
         Torch::ValueTensorType typeOfInputTensor =
             cast<Torch::ValueTensorType>(inputTensor.getType());
         ArrayRef<int64_t> sizesOfInputTensor = typeOfInputTensor.getSizes();
-        unsigned rank = sizesOfInputTensor.size();
+        unsigned rankOfInputTensor = sizesOfInputTensor.size();
 
         // supported modes:
         // bilinear (half_pixel), bilinear with align_corners,
@@ -2787,7 +2787,7 @@ void mlir::torch::onnx_c::populateDefaultDomainQtoZ(
         // nearest_pytorch_half_pixel
         if (mode == "linear") {
           std::string modeStr;
-          switch (rank) {
+          switch (rankOfInputTensor) {
           case 3:
             modeStr = "linear";
             break;
